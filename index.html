@@ -606,7 +606,7 @@
         // ---------- STATE ----------
         let daftarSoal = [];          // soal yang sedang ditampilkan (sudah diacak)
         let timerInterval = null;
-        let waktuDetik = 2700;        // 10 menit = 600 detik
+        let waktuDetik = 3600;        // 10 menit = 600 detik
         let isTimerRunning = false;
         let isSubmitted = false;
 
@@ -756,8 +756,8 @@
                 clearInterval(timerInterval);
                 timerInterval = null;
             }
-            waktuDetik = 2700;
-            timerDisplay.textContent = '45:00';
+            waktuDetik = 3600;
+            timerDisplay.textContent = '60:00';
             isTimerRunning = false;
             // start ulang
             startTimer();
