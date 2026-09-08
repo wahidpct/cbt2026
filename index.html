@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Online - Acak Soal & Jawaban</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f4f7fc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            padding: 30px 35px;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 20, 40, 0.12);
+            transition: 0.25s;
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 600;
+            color: #0b2b4a;
+            border-left: 6px solid #2a7de1;
+            padding-left: 18px;
+            margin-bottom: 28px;
+            letter-spacing: -0.3px;
+        }
+        .identitas {
+            background: #f0f5fe;
+            padding: 18px 22px;
+            border-radius: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px 35px;
+            margin-bottom: 30px;
+            align-items: center;
+            border: 1px solid #d9e6f5;
+        }
+        .identitas label {
+            font-weight: 500;
+            color: #1a3b5e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .identitas input, .identitas select {
+            padding: 10px 14px;
+            border: 1px solid #cbdae9;
+            border-radius: 40px;
+            font-size: 15px;
+            background: white;
+            min-width: 180px;
+            transition: 0.2s;
+        }
+        .identitas input:focus, .identitas select:focus {
+            border-color: #2a7de1;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.15);
+        }
+        .timer-area {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+        .timer-box {
+            background: #1f2e46;
+            color: white;
+            padding: 10px 22px;
+            border-radius: 80px;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .timer-box span {
+            background: #f6c343;
+            color: #1f2e46;
+            padding: 2px 12px;
+            border-radius: 40px;
+            font-size: 20px;
+        }
+        .btn-acak {
+            background: #eef3fa;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #1d3f62;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.15s;
+            border: 1px solid #c4d4e8;
+        }
+        .btn-acak:hover {
+            background: #dce6f2;
+            transform: scale(0.97);
+        }
+        .soal-item {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 22px 25px 25px 25px;
+            margin-bottom: 25px;
+            border: 1px solid #e4ebf5;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            transition: 0.2s;
+        }
+        .soal-item:hover {
+            border-color: #b6cee9;
+        }
+        .soal-header {
+            display: flex;
+            gap: 12px;
+            font-weight: 600;
+            color: #113355;
+            margin-bottom: 16px;
+            font-size: 17px;
+        }
+        .soal-header .nomor {
+            background: #dde8fa;
+            padding: 3px 14px;
+            border-radius: 40px;
+            font-size: 15px;
+            color: #0a2844;
+        }
+        .soal-header .tipe {
+            background: #e2ecfe;
+            padding: 3px 14px;
+            border-radius: 40px;
+            font-size: 14px;
+        }
+        .soal-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: #0a1e32;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+        .opsi-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 6px;
+        }
+        .opsi-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 8px 16px 8px 12px;
+            border-radius: 60px;
+            background: #f8faff;
+            border: 1px solid #dfeaf5;
+            transition: 0.1s;
+            cursor: pointer;
+        }
+        .opsi-item:hover {
+            background: #ecf4ff;
+            border-color: #a6c1e4;
+        }
+        .opsi-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1f6ed4;
+            flex-shrink: 0;
+        }
+        .opsi-item label {
+            font-size: 16px;
+            color: #1a3552;
+            flex: 1;
+            cursor: pointer;
+            padding: 5px 0;
+        }
+        .jawaban-singkat {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .jawaban-singkat input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 18px;
+            border: 1px solid #ccdcee;
+            border-radius: 60px;
+            font-size: 15px;
+            background: #fafdff;
+            transition: 0.2s;
+        }
+        .jawaban-singkat input:focus {
+            border-color: #2a7de1;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.12);
+        }
+        .tombol-submit {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            border-top: 1px solid #d9e3ef;
+            padding-top: 30px;
+        }
+        .konfirmasi-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            color: #1b3c5e;
+        }
+        .konfirmasi-area input {
+            width: 20px;
+            height: 20px;
+            accent-color: #1f6ed4;
+        }
+        .btn-submit {
+            background: #1f6ed4;
+            color: white;
+            border: none;
+            padding: 14px 44px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 6px 12px rgba(26, 80, 170, 0.25);
+        }
+        .btn-submit:hover:not(:disabled) {
+            background: #1359b8;
+            transform: scale(0.97);
+        }
+        .btn-submit:disabled {
+            background: #a7bddb;
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.6;
+        }
+        .alert-box {
+            margin-top: 20px;
+            background: #e6f0fa;
+            padding: 14px 22px;
+            border-radius: 40px;
+            color: #143c66;
+            border-left: 5px solid #2a7de1;
+            font-weight: 500;
+        }
+        footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #7a8fa8;
+            font-size: 14px;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 20px 16px; }
+            .identitas { flex-direction: column; align-items: stretch; }
+            .timer-area { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>📝 Ujian Online</h1>
+
+    <!-- Identitas Siswa -->
+    <div class="identitas">
+        <label>Nama Siswa <input type="text" id="namaSiswa" placeholder="Nama lengkap" /></label>
+        <label>Kelas 
+            <select id="kelasSiswa">
+                <option value="X APHPI">X APHPI</option>
+                <option value="X KULINER 1">X KULINER 1</option>
+                <option value="X KULINER 2">X KULINER 2</option>
+                <option value="X TAV 1">X TAV 1</option>
+                <option value="X TAV 2">X TAV 2</option>
+                <option value="X TKR 2">X TKR 2</option>
+            </select>
+        </label>
+    </div>
+
+    <!-- Timer + acak manual -->
+    <div class="timer-area">
+        <div class="timer-box">⏳ <span id="timerDisplay">10:00</span></div>
+        <button class="btn-acak" id="acakUlangBtn">🔄 Acak ulang soal</button>
+    </div>
+
+    <!-- Tempat daftar soal -->
+    <div id="soalContainer"></div>
+
+    <!-- Submit & konfirmasi -->
+    <div class="tombol-submit">
+        <div class="konfirmasi-area">
+            <input type="checkbox" id="centangSelesai" />
+            <label for="centangSelesai">Saya sudah selesai mengerjakan</label>
+        </div>
+        <button class="btn-submit" id="submitBtn" disabled>✔️ Kumpulkan Jawaban</button>
+    </div>
+    <div id="infoAlert" class="alert-box" style="display: none;"></div>
+    <footer>© 2026 · Soal acak otomatis saat load</footer>
+</div>
+
+<script>
+    (function() {
+        // ---------- DATA SOAL (50 soal campuran) ----------
+        const bankSoal = [
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Dalam sistem komputer, semua data pada akhirnya direpresentasikan dalam bentuk...',
+                opsi: ['Desimal', 'Heksadesimal', 'Biner', 'Oktal'],
+                jawabanBenar: 'Biner'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Nilai desimal dari bilangan biner `1010` adalah...',
+                opsi: ['10', '11', '14', '16'],
+                jawabanBenar: '10'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Representasi biner dari angka desimal 5 adalah...',
+                opsi: ['100', '101', '110', '010'],
+                jawabanBenar: '101'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Hasil penjumlahan biner `101` + `011` adalah...',
+                opsi: ['1000', '1100', '1110', '0110'],
+                jawabanBenar: '1000'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Sebuah file teks berisi karakter A. Dalam kode ASCII, A bernilai 65. Nilai biner dari 65 adalah...',
+                opsi: ['1000001', '1001101', '1000101', '1011100'],
+                jawabanBenar: '1000001'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Kelompok 4 digit biner `1011` sama dengan nilai heksadesimal...',
+                opsi: ['A', 'B', 'D', 'F'],
+                jawabanBenar: 'B'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Planet terbesar di tata surya?',
+                opsi: ['Jupiter', 'Saturnus', 'Neptunus', 'Uranus'],
+                jawabanBenar: 'Jupiter'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Satuan terkecil data dalam sistem biner disebut...',
+                opsi: ['Byte', 'Bit', 'Word', 'Nibble'],
+                jawabanBenar: 'Bit'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: '8 Bit setara dengan...',
+                opsi: ['1 Byte', '1 Nibble', '1 Kilobyte', '1 Megabyte'],
+                jawabanBenar: '1 Byte'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Proses mengubah data dari bentuk biner ke bentuk desimal disebut...',
+                opsi: ['Encoding', 'Decoding', 'Compiling', 'Debugging'],
+                jawabanBenar: 'Decoding'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Situs web yang berfungsi untuk mencari informasi di internet disebut...',
+                opsi: ['Web', 'Search Engine', 'Browser', 'Server'],
+                jawabanBenar: 'Search Engine'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Salah satu contoh Search Engine paling populer di dunia adalah...',
+                opsi: ['Yahoo', 'Google', 'Bing', 'Benar Semua'],
+                jawabanBenar: 'Benar Semua'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Kata kunci yang diketikkan pengguna saat mencari informasi disebut...',
+                opsi: ['Link', 'Keyword', 'url', 'Domain'],
+                jawabanBenar: 'Keyword'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Teknik memaksimalkan website agar muncul di halaman atas hasil pencarian disebut...',
+                opsi: ['SEM', 'SEO', 'HTTP', 'FTP'],
+                jawabanBenar: 'SEO'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Untuk mencari file dengan format PDF di Google, kita bisa menggunakan operator...',
+                opsi: ['site:', 'filetype:', 'intitle:', 'inurl:'],
+                jawabanBenar: 'filetype:'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Search engine bekerja dengan menggunakan program otomatis untuk mengumpulkan data dari internet. Program ini disebut...',
+                opsi: ['spider', 'algorithm', 'browser', 'indexer'],
+                jawabanBenar: 'spider'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Komponen fisik yang dapat dilihat dan diraba dari sebuah komputer disebut...',
+                opsi: ['Software', 'Hardware', 'Firmware', 'Brainware'],
+                jawabanBenar: 'Hardware'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Yang termasuk dalam perangkat keras output adalah...',
+                opsi: ['Monitor', 'Mouse', 'Prosesor', 'MicroSD'],
+                jawabanBenar: 'Monitor'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Perangkat lunak yang berfungsi untuk mengoperasikan komputer secara dasar adalah...',
+                opsi: ['Aplikasi', 'Sistem Operasi', 'Driver', 'Utility'],
+                jawabanBenar: 'Sistem Operasi'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Contoh dari perangkat lunak aplikasi adalah...',
+                opsi: ['Windows', 'Linux', 'Ms.Word', 'BIOS'],
+                jawabanBenar: 'Ms.Word'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Orang yang mengoperasikan atau menggunakan komputer disebut...',
+                opsi: ['Brainware', 'Malware', 'Software', 'Firmware'],
+                jawabanBenar: 'Brainware'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Perangkat penyimpanan data yang bersifat permanen (tidak hilang saat mati listrik) disebut...',
+                opsi: ['RAM', 'Cache', 'Register', 'Storage Device'],
+                jawabanBenar: 'Storage Device'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Yang merupakan contoh Storage Device adalah...',
+                opsi: ['HDD', 'SSD', 'MicroSD', 'Benar Semua'],
+                jawabanBenar: 'Benar Semua'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Komponen yang berfungsi sebagai otak pemrosesan data pada komputer adalah...',
+                opsi: ['RAM', 'CPU', 'VGA', 'PSU'],
+                jawabanBenar: 'CPU'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Perangkat lunak yang digunakan untuk melindungi komputer dari virus disebut...',
+                opsi: ['Antivirus', 'Sistem Operasi', 'Database', 'Linux'],
+                jawabanBenar: 'Antivirus'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Urutan yang benar dalam siklus pemrosesan data komputer adalah...',
+                opsi: ['Output - Proses - Input', 'Input - Proses - Output', 'Proses - Input - Output', 'Input - Output - Proses'],
+                jawabanBenar: 'Input - Proses - Output'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Dalam sistem komputasi modern, teknologi penyimpanan yang tidak memiliki bagian bergerak (mechanical moving parts) dan menggunakan sirkuit terintegrasi untuk menyimpan data disebut…',
+                opsi: ['HDD', 'SSD', 'DVD-ROM', 'Magnetic Tape'],
+                jawabanBenar: 'SSD'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Kemampuan komputer untuk menjalankan lebih dari satu program atau proses dalam waktu yang bersamaan disebut…',
+                opsi: ['Multi Tasking', 'Multi Threading', 'Multi Processing', 'Time Sharing'],
+                jawabanBenar: 'Multi Tasking'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Perangkat keras yang berfungsi mengatur distribusi listrik dari sumber daya ke seluruh komponen komputer adalah…',
+                opsi: ['PSU', 'Motherboard', 'Cooling Fan', 'Casing'],
+                jawabanBenar: 'PSU'
+            },
+            {
+                tipe: 'pilihan',
+                pertanyaan: 'Perkembangan sistem komputasi yang memungkinkan pengguna mengakses data dan aplikasi melalui internet tanpa harus menyimpannya di perangkat lokal disebut…',
+                opsi: ['Big Data', 'Cloud Computing', 'IoT', 'AI'],
+                jawabanBenar: 'Cloud Computing'
+            },
+            {
+                tipe: 'singkat',
+                pertanyaan: 'Sistem bilangan yang hanya menggunakan angka 0 dan 1 disebut...',
+                jawabanBenar: 'Biner'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Apa kepanjangan dari SERP?',
+                jawabanBenar: 'Search Engine Result Page'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Operator `site:` digunakan untuk mencari di...',
+                jawabanBenar: 'situs web tertentu'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Program otomatis yang mengumpulkan data dari internet untuk search engine disebut...',
+                jawabanBenar: 'Bot'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Google didirikan oleh Larry Page dan...',
+                jawabanBenar: 'Sergey Brin'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Untuk mencari kata persis seperti "sistem komputer", kita gunakan tanda...',
+                jawabanBenar: 'kutip'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Operator untuk mencari file gambar di Google adalah...',
+                jawabanBenar: 'Images'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Kepanjangan dari SEO adalah...',
+                jawabanBenar: 'Search Engine Optimization'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Kata kunci untuk mencari informasi disebut...',
+                jawabanBenar: 'Keyword'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Sebutkan salah satu contoh search engine lokal buatan Indonesia!',
+                jawabanBenar: 'Telusur'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Situs pencarian informasi di internet disebut...',
+                jawabanBenar: 'Search Engine'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Apa nama proses mengubah data biner menjadi data desimal?',
+                jawabanBenar: 'Decoding'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: ' Tuliskan hasil penjumlahan biner `101` + `100`!',
+                jawabanBenar: '1001'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Konsep komputasi di mana perangkat-perangkat fisik (seperti lampu, kulkas, kendaraan) dilengkapi sensor dan terhubung ke internet untuk saling bertukar data disebut...',
+                jawabanBenar: 'iot'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Media penyimpanan portabel yang menggunakan memori flash dan terhubung melalui port USB disebut...',
+                jawabanBenar: 'Flashdisk'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Sebutkan nama presiden pertama Indonesia?',
+                jawabanBenar: 'Soekarno'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Kumpulan dua atau lebih komputer yang saling terhubung untuk berbagi data dan sumber daya disebut...',
+                jawabanBenar: 'Jaringan Komputer'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Jenis memori berkecepatan tinggi yang terletak di dalam atau sangat dekat dengan CPU untuk menyimpan instruksi yang sering diakses disebut...',
+                jawabanBenar: 'Cache'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Perangkat lunak yang dibuat untuk tujuan spesifik tertentu, misalnya untuk mengedit foto atau membuat laporan keuangan, termasuk dalam kategori...',
+                jawabanBenar: 'Program Aplikasi'
+            },
+             {
+                tipe: 'singkat',
+                pertanyaan: 'Komponen utama pada motherboard yang berfungsi menghubungkan semua perangkat keras dan menjadi jalur komunikasi data disebut...',
+                jawabanBenar: 'Chipset'
+            },
+        ];
+
+        // ---------- STATE ----------
+        let daftarSoal = [];          // soal yang sedang ditampilkan (sudah diacak)
+        let timerInterval = null;
+        let waktuDetik = 2700;        // 10 menit = 600 detik
+        let isTimerRunning = false;
+        let isSubmitted = false;
+
+        // Elemen DOM
+        const container = document.getElementById('soalContainer');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const submitBtn = document.getElementById('submitBtn');
+        const centangSelesai = document.getElementById('centangSelesai');
+        const infoAlert = document.getElementById('infoAlert');
+        const acakUlangBtn = document.getElementById('acakUlangBtn');
+        const namaInput = document.getElementById('namaSiswa');
+        const kelasSelect = document.getElementById('kelasSiswa');
+
+        // ---------- FUNGSI ACUAN ----------
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Acak urutan soal, dan untuk pilihan ganda acak opsi + sesuaikan jawabanBenar
+        function generateRandomSoal() {
+            // 1. ambil salinan bankSoal
+            const shuffledSoal = shuffleArray([...bankSoal]);
+
+            // 2. untuk setiap soal tipe pilihan, acak opsi dan perbarui jawabanBenar
+            const processed = shuffledSoal.map(soal => {
+                if (soal.tipe === 'pilihan') {
+                    const opsiAsli = [...soal.opsi];
+                    const jawabanBenarAsli = soal.jawabanBenar;
+                    // acak opsi
+                    const shuffledOpsi = shuffleArray([...opsiAsli]);
+                    // jawabanBenar baru = nilai yang sama (tetapi tetap string)
+                    // karena jawabanBenar adalah teks, dan opsi sudah diacak, 
+                    // kita cari indeks jawaban benar di opsi asli, lalu ambil dari shuffledOpsi di posisi yang sama? 
+                    // Cara lebih aman: jawabanBenar adalah string, tetap sama nilainya.
+                    // Tapi karena opsi diacak, jawabanBenar tetap berupa string yang sama (misal "Jakarta")
+                    // tidak masalah, karena saat render kita akan tandai radio yang value-nya sama dengan jawabanBenar.
+                    return {
+                        ...soal,
+                        opsi: shuffledOpsi,
+                        jawabanBenar: jawabanBenarAsli   // tetap sama
+                    };
+                } else {
+                    return { ...soal };
+                }
+            });
+            return processed;
+        }
+
+        // Render soal ke container
+        function renderSoal(soalArray) {
+            if (!soalArray || soalArray.length === 0) {
+                container.innerHTML = '<p style="padding:20px;">Tidak ada soal.</p>';
+                return;
+            }
+
+            let html = '';
+            soalArray.forEach((soal, index) => {
+                const nomor = index + 1;
+                const tipeLabel = soal.tipe === 'pilihan' ? 'Pilihan Ganda' : 'Jawaban Singkat';
+
+                html += `<div class="soal-item" data-index="${index}">`;
+                html += `<div class="soal-header"><span class="nomor">Soal ${nomor}</span><span class="tipe">${tipeLabel}</span></div>`;
+                html += `<div class="soal-text">${soal.pertanyaan}</div>`;
+
+                if (soal.tipe === 'pilihan') {
+                    html += `<div class="opsi-container">`;
+                    // opsi sudah diacak dari generateRandomSoal
+                    soal.opsi.forEach((opsiText, idx) => {
+                        const radioId = `q${index}_${idx}`;
+                        html += `
+                            <div class="opsi-item">
+                                <input type="radio" name="soal_${index}" value="${opsiText}" id="${radioId}" />
+                                <label for="${radioId}">${opsiText}</label>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                } else {
+                    // jawaban singkat
+                    html += `
+                        <div class="jawaban-singkat">
+                            <input type="text" placeholder="Tulis jawaban ..." data-soalindex="${index}" class="input-singkat" />
+                        </div>
+                    `;
+                }
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+
+            // event listener untuk radio & input singkat tidak diperlukan khusus, nanti diambil saat submit
+        }
+
+        // Fungsi untuk memuat ulang (acak + render)
+        function loadAcakDanRender() {
+            if (isSubmitted) {
+                alert('Ujian sudah dikumpulkan. Refresh halaman untuk memulai ulang.');
+                return;
+            }
+            // acak soal
+            daftarSoal = generateRandomSoal();
+            renderSoal(daftarSoal);
+            // reset centang
+            centangSelesai.checked = false;
+            submitBtn.disabled = true;
+            // reset alert
+            infoAlert.style.display = 'none';
+            infoAlert.textContent = '';
+            // reset timer jika belum berjalan (atau jalankan)
+            if (!isTimerRunning) {
+                startTimer();
+            }
+        }
+
+        // ---------- TIMER ----------
+        function startTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            isTimerRunning = true;
+            timerInterval = setInterval(() => {
+                if (waktuDetik <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    isTimerRunning = false;
+                    timerDisplay.textContent = '00:00';
+                    alert('⏰ Waktu habis! Silakan kumpulkan.');
+                    // otomatis submit? atau biarkan user klik submit dengan centang
+                    // kita enable submit jika centang dicentang, tapi tidak otomatis.
+                    // Tapi akan kita disable submit? kita biarkan saja.
+                    return;
+                }
+                waktuDetik--;
+                const menit = Math.floor(waktuDetik / 60);
+                const detik = waktuDetik % 60;
+                timerDisplay.textContent = `${String(menit).padStart(2, '0')}:${String(detik).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function resetTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            waktuDetik = 2700;
+            timerDisplay.textContent = '45:00';
+            isTimerRunning = false;
+            // start ulang
+            startTimer();
+        }
+
+        // ---------- SUBMIT ----------
+        function handleSubmit() {
+            if (isSubmitted) {
+                alert('Sudah dikumpulkan.');
+                return;
+            }
+
+            // validasi identitas
+            const nama = namaInput.value.trim();
+            if (nama === '') {
+                infoAlert.style.display = 'block';
+                infoAlert.textContent = '⚠️ Harap isi nama siswa.';
+                return;
+            }
+
+            // cek centang
+            if (!centangSelesai.checked) {
+                infoAlert.style.display = 'block';
+                infoAlert.textContent = '⚠️ Centang "Saya sudah selesai mengerjakan" terlebih dahulu.';
+                return;
+            }
+
+            // kumpulkan jawaban
+            const jawabanUser = [];
+            const soalItems = document.querySelectorAll('.soal-item');
+            let semuaTerisi = true;
+
+            soalItems.forEach((item, idx) => {
+                const soal = daftarSoal[idx];
+                if (soal.tipe === 'pilihan') {
+                    const selected = item.querySelector(`input[name="soal_${idx}"]:checked`);
+                    if (selected) {
+                        jawabanUser.push({ nomor: idx+1, tipe: 'pilihan', jawaban: selected.value });
+                    } else {
+                        jawabanUser.push({ nomor: idx+1, tipe: 'pilihan', jawaban: '(tidak diisi)' });
+                        semuaTerisi = false;
+                    }
+                } else {
+                    const input = item.querySelector('.input-singkat');
+                    if (input) {
+                        const val = input.value.trim();
+                        if (val === '') {
+                            jawabanUser.push({ nomor: idx+1, tipe: 'singkat', jawaban: '(tidak diisi)' });
+                            semuaTerisi = false;
+                        } else {
+                            jawabanUser.push({ nomor: idx+1, tipe: 'singkat', jawaban: val });
+                        }
+                    }
+                }
+            });
+
+            // Hitung skor (opsional)
+            let benar = 0;
+            jawabanUser.forEach((jaw, index) => {
+                const soal = daftarSoal[index];
+                if (jaw.jawaban === soal.jawabanBenar) benar++;
+            });
+
+            // Tampilkan hasil (alert)
+            const kelas = kelasSelect.value;
+            const total = daftarSoal.length;
+            let pesan = `📊 Hasil Ujian\nNama: ${nama}\nKelas: ${kelas}\nJawaban benar: ${benar} dari ${total}`;
+            if (!semuaTerisi) pesan += '\n⚠️ Ada jawaban kosong.';
+            alert(pesan);
+
+            // Nonaktifkan submit & timer
+            isSubmitted = true;
+            submitBtn.disabled = true;
+            centangSelesai.disabled = true;
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                isTimerRunning = false;
+            }
+            infoAlert.style.display = 'block';
+            infoAlert.textContent = '✅ Ujian selesai. Jawaban telah dikumpulkan.';
+            // disable semua input
+            document.querySelectorAll('input, select, button').forEach(el => {
+                if (el !== acakUlangBtn) el.disabled = true;
+            });
+            acakUlangBtn.disabled = true; // tidak bisa acak lagi
+        }
+
+        // ---------- EVENT LISTENER ----------
+        // centang selesai -> enable submit
+        centangSelesai.addEventListener('change', function() {
+            if (this.checked && !isSubmitted) {
+                submitBtn.disabled = false;
+                infoAlert.style.display = 'none';
+            } else {
+                submitBtn.disabled = true;
+            }
+        });
+
+        submitBtn.addEventListener('click', handleSubmit);
+
+        acakUlangBtn.addEventListener('click', function() {
+            if (isSubmitted) {
+                alert('Ujian sudah dikumpulkan. Refresh halaman untuk memulai ulang.');
+                return;
+            }
+            // reset timer?
+            // konfirmasi
+            if (confirm('Acak ulang soal akan mereset timer ke 10 menit. Lanjutkan?')) {
+                resetTimer();
+                loadAcakDanRender();
+                // reset centang
+                centangSelesai.checked = false;
+                submitBtn.disabled = true;
+                infoAlert.style.display = 'none';
+                // enable semua (jika ada yang disable)
+                document.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+                centangSelesai.disabled = false;
+                isSubmitted = false;
+            }
+        });
+
+        // Inisialisasi: acak otomatis saat load
+        window.addEventListener('load', function() {
+            // reset state
+            isSubmitted = false;
+            centangSelesai.disabled = false;
+            submitBtn.disabled = true;
+            // load soal acak
+            daftarSoal = generateRandomSoal();
+            renderSoal(daftarSoal);
+            // timer
+            resetTimer(); // start 10 menit
+            // event untuk input nama/kelas tidak perlu
+            infoAlert.style.display = 'none';
+        });
+
+        // Jika user memuat ulang halaman, semua state reset.
+        // tambahan: jika timer habis, kita tidak matikan fungsi, hanya alert.
+        // Biarkan user bisa submit jika centang dicentang.
+        // Namun jika waktu habis, timerDisplay 00:00, dan tombol submit tetap bisa diklik jika centang.
+        // kita tambahkan cek di handleSubmit jika waktu habis? opsional.
+
+    })();
+</script>
+</body>
+</html>
