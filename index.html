@@ -292,14 +292,19 @@
                 <option value="X TAV 1">X TAV 1</option>
                 <option value="X TAV 2">X TAV 2</option>
                 <option value="X TKR 2">X TKR 2</option>
+                <option value="X TKR 1">X TKR 1</option>
+                <option value="X TKR 3">X TKR 3</option>
+                <option value="X TSM 1">X TSM 1</option>
+                <option value="X TSM 2">X TSM 2</option>
+                <option value="X DPB">X DPB</option>
             </select>
         </label>
     </div>
 
     <!-- Timer + acak manual -->
     <div class="timer-area">
-        <div class="timer-box">⏳ <span id="timerDisplay">10:00</span></div>
-        <button class="btn-acak" id="acakUlangBtn">🔄 Acak ulang soal</button>
+        <div class="timer-box">⏳ <span id="timerDisplay">90:00</span></div>
+//        <button class="btn-acak" id="acakUlangBtn">🔄 Acak ulang soal</button>
     </div>
 
     <!-- Tempat daftar soal -->
@@ -323,9 +328,9 @@
         const bankSoal = [
             {
                 tipe: 'pilihan',
-                pertanyaan: 'Dalam sistem komputer, semua data pada akhirnya direpresentasikan dalam bentuk...',
-                opsi: ['Desimal', 'Heksadesimal', 'Biner', 'Oktal'],
-                jawabanBenar: 'Biner'
+                pertanyaan: 'Rina adalah seorang videografer yang ditugaskan untuk membuat video profil perusahaan. Ia ingin menampilkan kesan bahwa perusahaan tersebut besar, megah, dan berwibawa. Ia memutuskan untuk mengambil gambar dari posisi bawah menghadap ke atas terhadap gedung perusahaan. Teknik pengambilan gambar yang digunakan Rina disebut...',
+                opsi: ['High angle','Low angle','Birds eye view','Eye level','Dutch angle'],
+                jawabanBenar: 'Low angle'
             },
             {
                 tipe: 'pilihan',
@@ -756,8 +761,8 @@
                 clearInterval(timerInterval);
                 timerInterval = null;
             }
-            waktuDetik = 3600;
-            timerDisplay.textContent = '60:00';
+            waktuDetik = 5400;
+            timerDisplay.textContent = '90:00';
             isTimerRunning = false;
             // start ulang
             startTimer();
